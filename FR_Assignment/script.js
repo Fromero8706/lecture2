@@ -76,7 +76,7 @@ function onClick( event ) {
         const object = intersects[0].object
         console.log(object) // debug
 
-        object.material.color.set( 'pink' )
+        object.material.color.set( 'red' )
 
         // get user strings
         let data, count
