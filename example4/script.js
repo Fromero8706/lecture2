@@ -2,13 +2,13 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.124.0/build/three.module.js'
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.124.0/examples/jsm/controls/OrbitControls.js'
 import { Rhino3dmLoader } from 'https://cdn.jsdelivr.net/npm/three@0.124.0/examples/jsm/loaders/3DMLoader.js'
-//import { GUI } from './jsm/libs/dat.gui.module.js';
+import { GUI } from './jsm/libs/dat.gui.module.js';
 
 
 let camera, scene, raycaster, renderer
 const mouse = new THREE.Vector2()
 window.addEventListener( 'click', onClick, false);
-//let gui;
+let gui;
 
 init()
 animate()
@@ -45,6 +45,7 @@ function init() {
 
         document.getElementById('loader').remove()
         scene.add( object )
+        initGUI( object.layers )
         console.log( object )
 
     } )
