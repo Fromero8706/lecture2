@@ -16,7 +16,7 @@ function init() {
 
     // create a scene and a camera
     scene = new THREE.Scene()
-    scene.background = new THREE.Color('crimson')
+    scene.background = new THREE.Color('orange')
     camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 1000 )
     camera.position.y = - 100
 
