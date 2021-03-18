@@ -41,7 +41,7 @@ function init() {
     const loader = new Rhino3dmLoader()
     loader.setLibraryPath( 'https://cdn.jsdelivr.net/npm/rhino3dm@0.13.0/' )
 
-    loader.load( '01_Low Poly to Mesh.3dm', function ( object ) {
+    loader.load( 'lowpoly.3dm', function ( object ) {
 
         document.getElementById('loader').remove()
         scene.add( object )
