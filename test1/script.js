@@ -2,13 +2,10 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.124.0/build/three.module.js'
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.124.0/examples/jsm/controls/OrbitControls.js'
 import { Rhino3dmLoader } from 'https://cdn.jsdelivr.net/npm/three@0.124.0/examples/jsm/loaders/3DMLoader.js'
-import { GUI } from './jsm/libs/dat.gui.module.js';
-
 
 let camera, scene, raycaster, renderer
 const mouse = new THREE.Vector2()
 window.addEventListener( 'click', onClick, false);
-let gui;
 
 init()
 animate()
@@ -19,9 +16,9 @@ function init() {
 
     // create a scene and a camera
     scene = new THREE.Scene()
-    scene.background = new THREE.Color(0,0,0)
-    camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 0.1, 1000 )
-    camera.position.y = - 30
+    scene.background = new THREE.Color('crimson')
+    camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 1000 )
+    camera.position.y = - 100
 
     // create the renderer and add it to the html
     renderer = new THREE.WebGLRenderer( { antialias: true } )
@@ -45,7 +42,6 @@ function init() {
 
         document.getElementById('loader').remove()
         scene.add( object )
-        initGUI( object.layers )
         console.log( object )
 
     } )
@@ -70,6 +66,12 @@ function onClick( event ) {
     let container = document.getElementById( 'container' )
     if (container) container.remove()
 
+    // reset object colours
+    scene.traverse((child, i) => {
+        if (child.isMesh) {
+            child.material.color.set( 'white' )
+        }
+    });
 
     if (intersects.length > 0) {
 
@@ -77,7 +79,7 @@ function onClick( event ) {
         const object = intersects[0].object
         console.log(object) // debug
 
-        object.material.color.set( 'red' )
+        object.material.color.set( 'yellow' )
 
         // get user strings
         let data, count
@@ -87,12 +89,6 @@ function onClick( event ) {
             // breps store user strings differently...
             data = object.parent.userData.attributes.userStrings
         }
-        // reset object colours
-    scene.traverse((child, i) => {
-        if (child.isMesh) {
-            child.material.color.set( 'white' )
-        }
-    });
 
         // do nothing if no user strings
         if ( data === undefined ) return
@@ -118,48 +114,10 @@ function onClick( event ) {
 
 }
 
-function initGUI( layers ) {
-
-    gui = new GUI( { width: 300 } );
-    const layersControl = gui.addFolder( 'layers' );
-    layersControl.open();
-
-    for ( let i = 0; i < layers.length; i ++ ) {
-
-        const layer = layers[ i ];
-        layersControl.add( layer, 'visible' ).name( layer.name ).onChange( function ( val ) {
-
-            const name = this.object.name;
-
-            scene.traverse( function ( child ) {
-
-                if ( child.userData.hasOwnProperty( 'attributes' ) ) {
-
-                    if ( 'layerIndex' in child.userData.attributes ) {
-
-                        const layerName = layers[ child.userData.attributes.layerIndex ].name;
-
-                        if ( layerName === name ) {
-
-                            child.visible = val;
-                            layer.visible = val;
-                        }
-
-                    }
-
-                }
-
-            } );
-
-        } );
-
-    }
-
-}
-
 function animate() {
 
     requestAnimationFrame( animate )
     renderer.render( scene, camera )
 
 }
+
